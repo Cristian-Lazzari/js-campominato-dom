@@ -2,14 +2,15 @@ let bombArr = [];
 const level = document.querySelector("#level");
 const button = document.querySelector(".btn");
 const grid100 = document.querySelector(".grid");
+const eleScore = document.querySelector(".score");
+const eleLevel = document.querySelector("#level")
+let score = 0;
 button.addEventListener('click',
 function(){
     if(level.value == 'easy'){
         arrBClear();
         randomArr(1, 100, 17);
-        let score = 0;
-
-        
+       
         grid100.innerHTML= ''
         grid100.classList.add('grid-100')
         for (let i = 1; i < 101; i++){
@@ -21,8 +22,7 @@ function(){
             if(bombArr.includes(i)){
                 eleBox.classList.add('bomb');
                 eleBox.addEventListener('click',
-                function(){
-                    
+                function(){ 
                     eleBox.classList.remove('hidden');
                 })
                 
@@ -32,6 +32,8 @@ function(){
                 function(){
                     score++;
                     eleBox.classList.remove('hidden');
+                    eleScore.innerHTML = ''
+                    eleScore.innerHTML = `<div class="box">${score}</div>`;
                 })
             }
 
@@ -41,30 +43,44 @@ function(){
     }
     else if (level.value == 'normal') {
         
-        // const grid100 = document.querySelector(".grid");
+        arrBClear();
+        randomArr(1, 81, 17);
+       
         grid100.innerHTML= ''
         grid100.classList.add('grid-81')
         for (let i = 1; i < 82; i++){
-            grid100.innerHTML+= `<div class="box">${i}</div>`
-            console.log(i)
+            const eleBox=document.createElement('div');
+            eleBox.classList.add('box');
+            eleBox.classList.add('hidden');
+            eleBox.innerHTML=`${i}`;
+            grid100.append(eleBox);
+            if(bombArr.includes(i)){
+                eleBox.classList.add('bomb');
+                eleBox.addEventListener('click', xclick)
+                
+            }else{
+                eleBox.classList.add('nonbomb')
+                eleBox.addEventListener('click',
+                function(){
+                    score++;
+                    eleBox.classList.remove('hidden');
+                    eleScore.innerHTML = ''
+                    eleScore.innerHTML = `<div class="box">${score}</div>`;
+                })
+            }
+
         }
     } else {
         
-        const grid100 = document.querySelector(".grid");
-        grid100.innerHTML= ''
-        grid100.classList.add('grid-49')
-        for (let i = 1; i < 50; i++){
-            grid100.innerHTML+= `<div class="box">${i}</div>`
-            console.log(i)
-        }
+        
     }
-    console.log(bombArr)
+    console.log(bombArr);
 })
 function getRnd(min, max) {
     return Math.floor(Math.random() * (max - min) ) + min;
 }
 function randomArr(min, max, nElement){
-    let rNumb;
+
     for (let i=0;i < nElement;i++){
         do{
             rNumb=getRnd(min,max);
@@ -76,3 +92,41 @@ function randomArr(min, max, nElement){
 function arrBClear(){
     bombArr=[]
 }
+function vclick(){
+    eleBox.removeEventListener('click',vclick())
+    score++;
+    eleBox.classList.remove('hidden');
+    eleScore.innerHTML = '';
+    eleScore.innerHTML = `<div class="box">${score}</div>`;
+}
+function xclick(){
+    
+    eleBox.classList.remove('hidden');
+    eleScore.innerHTML = '';
+    eleScore.innerHTML = `<div class="box">YOU ARE A LOSER</div>`;
+}
+//removeAllclick(eleBox)
+
+function
+arrBClear();
+        randomArr(1, 49, 5);
+       
+        grid100.innerHTML= '';
+        grid100.classList.add('grid-49')
+        for (let i = 1; i < 50; i++){
+            const eleBox = document.createElement('div');
+            eleBox.classList.add('box');
+            eleBox.classList.add('hidden');
+            eleBox.innerHTML=`${i}`;
+            grid100.append(eleBox);
+            if(bombArr.includes(i)){
+                eleBox.classList.add('bomb');
+                eleBox.addEventListener('click',
+                xclick)
+                
+            }else{
+                eleBox.classList.add('nonbomb');
+                eleBox.addEventListener('click', vclick)
+            }
+
+        }

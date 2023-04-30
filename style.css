@@ -58,7 +58,7 @@ main{
     width: 35px;
 }
 .box:hover{
-    background-color: rgba(0, 0, 0, 0.167);
+    opacity: 0.5;
 }
 .bomb{
     background-color: red;
@@ -75,4 +75,5 @@ footer{
     display: flex;
     align-items: center;
     padding-left: 1rem;
+    gap: .5em;
 }
