@@ -1,81 +1,49 @@
 let bombArr = [];
-const level = document.querySelector("#level");
-const button = document.querySelector(".btn");
-const grid100 = document.querySelector(".grid");
+let score = 0;
+
+const elegrid = document.querySelector(".grid");
 const eleScore = document.querySelector(".score");
 const eleLevel = document.querySelector("#level")
-let score = 0;
-button.addEventListener('click',
-function(){
-    if(level.value == 'easy'){
-        arrBClear();
-        randomArr(1, 100, 17);
-       
-        grid100.innerHTML= ''
-        grid100.classList.add('grid-100')
-        for (let i = 1; i < 101; i++){
-            const eleBox=document.createElement('div');
-            eleBox.classList.add('box');
-            eleBox.classList.add('hidden');
-            eleBox.innerHTML=`${i}`;
-            grid100.append(eleBox);
-            if(bombArr.includes(i)){
-                eleBox.classList.add('bomb');
-                eleBox.addEventListener('click',
-                function(){ 
-                    eleBox.classList.remove('hidden');
-                })
-                
-            }else{
-                eleBox.classList.add('nonbomb')
-                eleBox.addEventListener('click',
-                function(){
-                    score++;
-                    eleBox.classList.remove('hidden');
-                    eleScore.innerHTML = ''
-                    eleScore.innerHTML = `<div class="box">${score}</div>`;
-                })
-            }
-
-        }
-        
-    
+const button = document.querySelector(".btn");
+button.addEventListener('click', selectLevel)
+//function
+function selectLevel(){
+    elegrid.innerHTML= ' '
+    let levelvalue = parseInt(eleLevel.value);
+    switch(levelvalue){ 
+        case 81:
+            elegrid.classList.add('grid-81');
+            arrBClear()
+            randomArr(1, 81, 20)
+            break;
+        case 49:
+            elegrid.classList.add('grid-49');
+            arrBClear()
+            randomArr(1, 10, 8)
+            break;
+        default:
+            elegrid.classList.add('grid-100');
+            arrBClear()
+            randomArr(1, 100, 10)
+            break;
     }
-    else if (level.value == 'normal') {
-        
-        arrBClear();
-        randomArr(1, 81, 17);
-       
-        grid100.innerHTML= ''
-        grid100.classList.add('grid-81')
-        for (let i = 1; i < 82; i++){
-            const eleBox=document.createElement('div');
-            eleBox.classList.add('box');
-            eleBox.classList.add('hidden');
-            eleBox.innerHTML=`${i}`;
-            grid100.append(eleBox);
-            if(bombArr.includes(i)){
-                eleBox.classList.add('bomb');
-                eleBox.addEventListener('click', xclick)
-                
-            }else{
-                eleBox.classList.add('nonbomb')
-                eleBox.addEventListener('click',
-                function(){
-                    score++;
-                    eleBox.classList.remove('hidden');
-                    eleScore.innerHTML = ''
-                    eleScore.innerHTML = `<div class="box">${score}</div>`;
-                })
-            }
-
+    for (let i = 1; i < levelvalue + 1; i++ ){
+        let eleBox = document.createElement('div');
+        eleBox.classList.add('box', 'hidden');
+        eleBox.innerHTML=`${i}`;
+        elegrid.append(eleBox);
+        if(bombArr.includes(i)){
+            eleBox.classList.add('bomb')
+            eleBox.addEventListener('click', xclick)
+        }else{
+            eleBox.classList.add('nonbomb')
+            eleBox.addEventListener('click', vclick)
         }
-    } else {
-        
-        
     }
-    console.log(bombArr);
-})
+    console.log(levelvalue);
+    console.log(bombArr)
+}
+
 function getRnd(min, max) {
     return Math.floor(Math.random() * (max - min) ) + min;
 }
@@ -85,7 +53,7 @@ function randomArr(min, max, nElement){
         do{
             rNumb=getRnd(min,max);
         }while(bombArr.includes(rNumb))
-        bombArr.push(rNumb)        
+        bombArr.push(rNumb);       
     }
 
 }
@@ -93,40 +61,24 @@ function arrBClear(){
     bombArr=[]
 }
 function vclick(){
-    eleBox.removeEventListener('click',vclick())
+    this.removeEventListener('click',vclick)
     score++;
-    eleBox.classList.remove('hidden');
+    this.classList.remove('hidden');
     eleScore.innerHTML = '';
-    eleScore.innerHTML = `<div class="box">${score}</div>`;
+    eleScore.innerHTML = `<div>${score}</div>`;
 }
 function xclick(){
-    
-    eleBox.classList.remove('hidden');
+    this.classList.remove('hidden');
     eleScore.innerHTML = '';
     eleScore.innerHTML = `<div class="box">YOU ARE A LOSER</div>`;
+    endgame();
 }
-//removeAllclick(eleBox)
-
-function
-arrBClear();
-        randomArr(1, 49, 5);
-       
-        grid100.innerHTML= '';
-        grid100.classList.add('grid-49')
-        for (let i = 1; i < 50; i++){
-            const eleBox = document.createElement('div');
-            eleBox.classList.add('box');
-            eleBox.classList.add('hidden');
-            eleBox.innerHTML=`${i}`;
-            grid100.append(eleBox);
-            if(bombArr.includes(i)){
-                eleBox.classList.add('bomb');
-                eleBox.addEventListener('click',
-                xclick)
-                
-            }else{
-                eleBox.classList.add('nonbomb');
-                eleBox.addEventListener('click', vclick)
-            }
-
+function endgame(){
+    let count = parseInt(eleLevel.value);
+    for (let i=0;i< count + 1;i++){
+        if(bombArr.includes(i)){
+            this.removeEventListener('click', xclick)
+            this.classList.remove('hidden');
         }
+    }
+}
